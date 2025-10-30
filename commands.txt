@@ -1,0 +1,31 @@
+Activate venv with Python 3.10:
+py -3.10 -m venv venv → .\venv\Scripts\activate
+
+pip install -r requirements.txt (if torch fails, run pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu)
+
+Prepare images:
+
+Option A: put images in data/images/ then run:
+python src/data/dataset_prepare_visualgenome.py --mode local --img_dir data/images --out data/dataset
+
+Option B: if you have a CSV of URLs (image_urls.csv), run:
+python src/data/download_images_from_urls.py --csv image_urls.csv --out data/images --max 1500
+then run the dataset_prepare_visualgenome.py in local mode.
+
+Process CV:
+python src/data/preprocess_cv_lite.py --meta data/dataset/metadata.csv --out data/dataset
+
+Face clustering:
+python src/data/face_cluster.py --emb_dir data/dataset/embeddings --meta data/dataset/metadata.csv --out data/dataset/face_clusters.csv
+
+Build graph:
+python src/data/build_graph.py --meta data/dataset/metadata.csv --cv data/dataset/cv_metadata_lite.csv --faces data/dataset/face_clusters.csv --out data/dataset/multimodal_graph.gpickle
+
+Baseline:
+python src/models/link_prediction_baseline.py --graph data/dataset/multimodal_graph.gpickle --sample 500
+
+Optional GNN:
+python src/models/train_gnn_lite.py --graph data/dataset/multimodal_graph.gpickle --emb_dir data/dataset/embeddings --epochs 200
+
+Blockchain (local Ganache running):
+python src/blockchain/deploy_proof.py --rpc http://127.0.0.1:7545 --file data/dataset/metadata.csv

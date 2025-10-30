@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pkl
+*.log
+
+# Virtual environment
+venv/
+.env/
+
+# Data and outputs
+data/VG_100K/
+data/images/
+data/dataset/embeddings/
+*.gpickle
+*.csv
+*.json
+*.zip
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# IDE & OS junk
+.vscode/
+.DS_Store
+Thumbs.db

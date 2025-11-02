@@ -22,7 +22,9 @@ def feature_vec(G, u, v):
     return [cn, pa, j]
 
 def run(graph_path, sample_size=500):
-    G = nx.read_gpickle(graph_path)
+    import pickle
+    with open(graph_path, "rb") as f:
+        G = pickle.load(f)
     users = [n for n,d in G.nodes(data=True) if d.get('type')=='user']
     pos=[]; neg=[]
     # collect positives/negatives among user-user pairs

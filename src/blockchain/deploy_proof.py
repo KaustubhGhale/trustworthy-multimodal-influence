@@ -9,10 +9,13 @@ import argparse, json, os
 from solcx import compile_source, install_solc
 from web3 import Web3
 import ipfshttpclient
+import solcx
+solcx.install_solc('0.8.20')
+solcx.set_solc_version('0.8.20')
 
 def compile_contract(path):
     source = open(path, 'r', encoding='utf-8').read()
-    install_solc('0.8.18')
+    install_solc('0.8.20')
     compiled = compile_source(source, output_values=['abi','bin'])
     _, contract_interface = compiled.popitem()
     return contract_interface['abi'], contract_interface['bin']
@@ -27,7 +30,7 @@ def deploy_and_add(rpc, sol_path, file_to_add):
     addr = tx_receipt.contractAddress
     print("Deployed contract at", addr)
     # add file to ipfs
-    client = ipfshttpclient.connect()
+    client = ipfshttpclient.connect("/dns/ipfs.io/tcp/443/https")
     res = client.add(file_to_add)
     cid = res['Hash']
     print("IPFS CID:", cid)

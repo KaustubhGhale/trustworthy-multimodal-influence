@@ -44,7 +44,10 @@ def load_node_features(G, emb_dir):
 
 import os
 def run(graph_path, emb_dir, epochs=200):
-    G = nx.read_gpickle(graph_path)
+    import pickle
+    with open(graph_path, "rb") as f:
+        G = pickle.load(f)
+
     X, users, idx = load_node_features(G, emb_dir)
     N = X.shape[0]
     # prepare pairs

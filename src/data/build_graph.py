@@ -57,7 +57,9 @@ def build(meta_csv, cv_csv, faces_csv, out_path):
                     else:
                         G.add_edge(users[i], users[j], weight=1, type='coappearance')
 
-    nx.write_gpickle(G, out_path)
+    import pickle
+    with open(out_path, "wb") as f:
+        pickle.dump(G, f)
     print("Saved graph to", out_path, "with", G.number_of_nodes(), "nodes and", G.number_of_edges(), "edges")
 
 if __name__ == "__main__":
